@@ -1,9 +1,12 @@
 # Simple-Swipe
-Lightweight jQuery plugin for multidevice touch support.
+Lightweight jQuery plugin for cross-platform touch support.
 
 ## Features
+ - indicates the state of the user's action
+ - returns the direction of the swipe
  - user definable refresh rate 
   - allows large functions to run without bogging the system
+ - options are easily adjustable
 
 ## Usage
 
