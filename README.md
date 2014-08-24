@@ -8,14 +8,15 @@ Lightweight jQuery plugin for multidevice touch support.
 ## Usage
 
 ```javascript
-   $().swipe(
-      function(direction, action, time, dx, dy, xinit, yinit){
-      }
-      ,{threshold: 200, refresh: 15}
-   );
+   $().swipe(function, options);
 ```  
- - ```threshold```: minimum distance from start point to return a swipe
- - ```refresh```: how often ```function``` is run (in ms)
+ - ```function``` is a function with the following format
+  - ```function(direction, action, time, dx, dy, xinit, yinit){}```
+ - ```options``` is an object with the following properties and default values
+  - ```{threshold: 200, refresh: 15}````
+    - ```threshold```: minimum distance from start point to return a swipe
+    - ```refresh```: how often ```function``` is run (in ms)
+
 
 ## Todo
  - add JavaScript only version
