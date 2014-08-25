@@ -22,9 +22,10 @@ $().swipe(function, options);
     - `xinit` and `yinit` are the coordinates of the initial position
 
  - `options` is an object with the following properties and default values:
-  - `{threshold: 200, refresh: 15}`
+  - `{threshold: 200, refresh: 15, ratio: 1}`
     - `threshold`: minimum distance (in px) from start point to return a swipe
     - `refresh`: how often `function` is run (in ms)
+    - `ratio`: ratio of x to y seperating vertical swipes from horizontal
 
 
 ## Todo
