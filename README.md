@@ -17,18 +17,18 @@ $( selector ).swipe(options);
  
 
  - `options` is an object with the following properties and default values:
-  - `{      swipe: function(){},
-            swipe_r: function(){},
-			swipe_l: function(){},
-			swipw_u: function(){},
-			swipe_d: function(){},
-			tap: function(){},
-			doubletap: function(){},
-			longtap: function(){},
-			times: [150, 75],
-			threshold: 200,
-            refresh: 15,
-            ratio: 1
+  - `{  swipe: function(){},
+	swipe_r: function(){},
+	swipe_l: function(){},
+	swipw_u: function(){},
+	swipe_d: function(){},
+	tap: function(){},
+	doubletap: function(){},
+	longtap: function(){},
+	times: [150, 75],
+	threshold: 200,
+	refresh: 15,
+	ratio: 1
         }`
     - `swipe`: is a function in the following format:
         - `function(direction, action, time, dx, dy, xinit, yinit){}`
