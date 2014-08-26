@@ -1,5 +1,5 @@
 # Simple-Swipe
-Lightweight jQuery plugin for cross-platform touch support.
+Lightweight jQuery (1.7) plugin for cross-platform touch support.
 
 ## Features
  - indicates the state of the user's action
@@ -11,7 +11,7 @@ Lightweight jQuery plugin for cross-platform touch support.
 ## Usage
 
 ```JavaScript
-$().swipe(function, options);
+$( selector ).swipe(function, options);
 ```  
  - `function` is a function with the following format:
   - `function(direction, action, time, dx, dy, xinit, yinit){}`
@@ -31,3 +31,4 @@ $().swipe(function, options);
 ## Todo
  - improve documentation
  - add JavaScript only version
+ - add support for previous versions of jQuery
