@@ -1,7 +1,5 @@
-// REKT SWIPE
-// could remove jQuery stuff but i'm using jQuery anyway
 (function ($) {
-    $.fn.swipe = function(func, options) {
+    $.fn.swipe = function(options) {
 
         //some values and stuff
         //this can be cleaned up i'm guessing
@@ -13,7 +11,15 @@
 
         //default parameters
         var param = $.extend({
-            threshold: 200,
+            swipe: function(){},
+			swipe_r: function(){},
+			swipe_l: function(){},
+			swipw_u: function(){},
+			swipe_d: function(){},
+			tap: function(){},
+			doubletap: function(){},
+			longtouch: function(){},
+			threshold: 200,
             refresh: 15, //refresh rate in ms
             ratio: 1 // is this even working?
         }, options);
@@ -45,7 +51,7 @@
 				console.log( "interval") 
                 dt = getms() - tinit;
 				direction = dir(dx, dy)
-                func(direction, action, dt, dx, dy, xinit, yinit);
+                param.swipe(direction, action, dt, dx, dy, xinit, yinit);
             }, param.refresh);
         }
 
@@ -90,7 +96,7 @@
             action = "end";
             
 
-            func(direction, action, dt, dx, dy, xinit, yinit);
+            param.swipe(direction, action, dt, dx, dy, xinit, yinit);
             $(this).one('mousedown touchstart', touchstart);
             $(document).off('keydown', escape);
 			console.log("end");
