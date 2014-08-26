@@ -93,8 +93,13 @@
 			else if (direction == "up") param.swipe_u()
 			else if (direction == "down") param.swipe_d()
 			
+			//tap
+			if ( dt < param.times[0] ) {
+				param.tap();
+			}
+			
 			// longtap
-			if ( dt > param.times[0]) {
+			if ( dt > param.times[0] && direction == "cancel") { //best way to check no move??
 				param.longtap();
 			}
 			//param.times[1] doubletap
