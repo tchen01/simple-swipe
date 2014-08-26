@@ -17,8 +17,9 @@
 			swipw_u: function(){},
 			swipe_d: function(){},
 			tap: function(){},
-			doubletap: function(){},
-			longtouch: function(){},
+			doubletap: function(){}, //how to do?
+			longtap: function(){},
+			times: [150, 75], //longtouch, doubletap
 			threshold: 200,
             refresh: 15, //refresh rate in ms
             ratio: 1 // is this even working?
@@ -84,12 +85,15 @@
 
         function end(e) {
             action = e.type;
-
-            var direction = dir(dx, dy)
-
+			
+			//RUN TEST FOR EVENTS HERE
+			
+			//param.times[0] longtap
+			//param.times[1] doubletap
+			
             xinit = yinit = 0;
             dx = dy = 0;
-
+	
             //this prevents mousemove from always happening
             $(this).off('mousemove touchmove', move);
 
