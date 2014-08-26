@@ -88,8 +88,17 @@
 			
 			//RUN TEST FOR EVENTS HERE
 			
-			//param.times[0] longtap
+			if (direction == "right") param.swipe_r()
+			else if (direction == "left") param.swipe_l()
+			else if (direction == "up") param.swipe_u()
+			else if (direction == "down") param.swipe_d()
+			
+			// longtap
+			if ( dt > param.times[0]) {
+				param.longtap();
+			}
 			//param.times[1] doubletap
+			//have to record time from end to start
 			
             xinit = yinit = 0;
             dx = dy = 0;
