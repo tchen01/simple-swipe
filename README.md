@@ -37,10 +37,10 @@ $( selector ).swipe(options);
             - `dx` and `dy` will return the change in x or y from the initial position
             - `xinit` and `yinit` are the coordinates of the initial position
         - `swipe` is run while a motion is ocurring
-~~    - all directional swipes are executed when a swipe is registered in the given direction.
+    - all directional swipes are executed when a swipe is registered in the given direction.
     - `tap`: 
     - `doubletap`:
-    - `longtouch`:~~
+    - `longtouch`:
     - `threshold`: minimum distance (in px) from start point to return a swipe
     - `refresh`: how often `swipe` is run (in ms)
     - `ratio`: ratio of x to y seperating vertical swipes from horizontal
