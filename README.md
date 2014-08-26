@@ -24,7 +24,8 @@ $( selector ).swipe(options);
 			swipe_d: function(){},
 			tap: function(){},
 			doubletap: function(){},
-			longtouch: function(){},
+			longtap: function(){},
+			times: [150, 75],
 			threshold: 200,
             refresh: 15,
             ratio: 1
@@ -40,7 +41,8 @@ $( selector ).swipe(options);
     - all directional swipes are executed when a swipe is registered in the given direction.
     - `tap`: 
     - `doubletap`:
-    - `longtouch`:
+    - `longtap`:
+    - `times`: how long (in ms) before tap becomes longtap, time second tap must occur in to be counted as doubletap
     - `threshold`: minimum distance (in px) from start point to return a swipe
     - `refresh`: how often `swipe` is run (in ms)
     - `ratio`: ratio of x to y seperating vertical swipes from horizontal
