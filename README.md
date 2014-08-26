@@ -13,8 +13,6 @@ Lightweight jQuery (1.7) plugin for cross-platform touch support.
 ```JavaScript
 $( selector ).swipe(options);
 ```  
- - `function` is a function with the following format:
- 
 
  - `options` is an object with the following properties and default values:
   - `{  swipe: function(){},
