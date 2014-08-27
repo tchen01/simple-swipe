@@ -4,7 +4,7 @@
         //some values and stuff
         //this can be cleaned up i'm guessing
         var xinit = yinit = 0;
-        var tinit = dt = 0;
+        var tinit = dt = tfin = 0;
         var dx = dy = 0;
         var distance = 0;
         var direction = action = interval = null;
@@ -88,23 +88,35 @@
 			
 			//RUN TEST FOR EVENTS HERE
 			
+			//trade ease of use for size of program?
 			if (direction == "right") param.swipe_r()
 			else if (direction == "left") param.swipe_l()
 			else if (direction == "up") param.swipe_u()
 			else if (direction == "down") param.swipe_d()
 			
-			//tap
-			if ( dt < param.times[0] ) {
-				param.tap();
+
+			if (direction == "cancel"){//best way to check no move??
+				if ( tinit - tfin < param.times[1]){
+					console.log("doubletap");
+					param.doubletap();
+				}
+				
+				// longtap
+				else if ( dt > param.times[0]) {
+					console.log("longtap");
+					param.longtap();
+				}
+			
+				else  { //avoid tap on first click of doubletap?
+					console.log("tap");
+					param.tap();
+				}
+				
+				
 			}
 			
-			// longtap
-			if ( dt > param.times[0] && direction == "cancel") { //best way to check no move??
-				param.longtap();
-			}
-			//param.times[1] doubletap
-			//have to record time from end to start
 			
+			tfin = getms();
             xinit = yinit = 0;
             dx = dy = 0;
 	
