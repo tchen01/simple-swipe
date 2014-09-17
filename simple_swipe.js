@@ -27,7 +27,7 @@
 
         //why use jQuery?
         $(this).one('mousedown touchstart', touchstart);
-		$(this).on('mouseup touchend touchcancel', end);
+	$(this).on('mouseup touchend touchcancel', end);
 				
 
         function touchstart(e) {
