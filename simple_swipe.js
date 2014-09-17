@@ -40,18 +40,18 @@
                 xinit = e.originalEvent.targetTouches[0].clientX;
                 yinit = e.originalEvent.targetTouches[0].clientY;
                 el = document.elementFromPoint(xinit, yinit);
-            };
+            }
             tinit = getms();
 
-            action = "start"
+            action = "start";
 
             $(this).on('mousemove touchmove', move);
             $(document).one('keydown', escape);
             escape();
 			interval = setInterval(function() {
-				console.log( "interval") 
+				console.log( "interval"); 
                 dt = getms() - tinit;
-				direction = dir(dx, dy)
+				direction = dir(dx, dy);
                 param.swipe(direction, action, dt, dx, dy, xinit, yinit);
             }, param.refresh);
         }
@@ -69,7 +69,7 @@
 
             action = e.type;
 
-            if (xinit != 0) {
+            if (xinit !== 0) {
 
                 if (action == 'mousemove') {
                     dx = e.clientX - xinit;
@@ -80,7 +80,7 @@
                 }
             }
 
-            action = "move"
+            action = "move";
         }
 
         function end(e) {
@@ -89,10 +89,10 @@
 			//RUN TEST FOR EVENTS HERE
 			
 			//trade ease of use for size of program?
-			if (direction == "right") param.swipe_r()
-			else if (direction == "left") param.swipe_l()
-			else if (direction == "up") param.swipe_u()
-			else if (direction == "down") param.swipe_d()
+			if (direction == "right") param.swipe_r();
+			else if (direction == "left") param.swipe_l();
+			else if (direction == "up") param.swipe_u();
+			else if (direction == "down") param.swipe_d();
 			
 
 			if (direction == "cancel"){//best way to check no move??
@@ -135,19 +135,19 @@
 
 
         function dir(dx, dy) {
-            distance = dx * dx + dy * dy
+            distance = dx * dx + dy * dy;
             theta = Math.atan2(dy, dx);
             xy = Math.abs(dx / dy);
 
             if (distance > param.threshold * param.threshold) {
                 if (xy > param.ratio) {
-                    if (dx > 0) return "left"
-                    else return "right"
+                    if (dx > 0) return "left";
+                    else return "right";
                 } else {
-                    if (dy > 0) return "down"
-                    else return "up"
+                    if (dy > 0) return "down";
+                    else return "up";
                 }
-            } else return "cancel"
+            } else return "cancel";
         }
 
     };
