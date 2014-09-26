@@ -11,7 +11,7 @@
 
 	<body>
 	
-	<div id="container" >fda
+	<div id="container" >fdaas
 	<div>
 
 	</body>
@@ -28,6 +28,7 @@
 	
 	var mySA = new swipeArea( document.getElementById( "container" ) );
 	var mySA2 = new swipeArea( 1 );
-	mySA.swipe({swipe_r: function(){console.log("wow!")}});
+	mySA.swipe({swipe: function(){alert("wow!")}});
+    //document.getElementById( "container" ).addEventListener("touchstart", function(){alert("noob")})
 	</script>
 </html>
