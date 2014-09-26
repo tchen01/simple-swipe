@@ -7,8 +7,8 @@
 	};
 
 	swipeArea.prototype.swipe = function( options ){
-		 //some values and stuff
-        //this can be cleaned up i'm guessing
+		//some values and stuff
+        //there is probably a better way to do this?
         var element = this.s;
 		var xinit;
 		var yinit;
@@ -23,7 +23,7 @@
 		var interval;
 		
 		//merge function
-		var param = {
+		var defaults = {
             swipe: function(){},
 			swipe_r: function(){},
 			swipe_l: function(){},
@@ -38,8 +38,15 @@
             ratio: 1 
         };
 		
-		console.log( element );
 		
+		function merge(a, b) {
+        var m = {};
+        for (var attrname in a) m[attrname] = a[attrname];
+        for (attrname in b) m[attrname] = b[attrname];
+        return m;
+		};
+		
+		var param = merge(defaults, options);
 		
 		element.addEventListener('mousedown', swipe_start)
 		//this sometimes doesn't go?
@@ -47,8 +54,6 @@
 
 		
 		function swipe_start(e){
-			console.log( "hai" );
-		    
 			action = e.type;
 
             if (action == 'mousedown') {
@@ -71,7 +76,6 @@
 
             escape();
 			interval = setInterval(function() {
-				console.log( "interval") 
                 dt = getms() - tinit;
 				direction = dir(dx, dy)
                 param.swipe(direction, action, dt, dx, dy, xinit, yinit);
@@ -80,8 +84,6 @@
 		}
 		
 		function swipe_move(e){
-		console.log( "move" );
-		
 			action = e.type;
 
             if (xinit != 0) {
@@ -100,12 +102,9 @@
 		}
 		
 		function swipe_end(e){
-			console.log("bai");
-		
-			//remove listener?
+	
 			action = e.type;
 				
-			//RUN TEST FOR EVENTS HERE
 			
 			//trade ease of use for size of program?
 			if (direction == "right") param.swipe_r()
@@ -113,7 +112,6 @@
 			else if (direction == "up") param.swipe_u()
 			else if (direction == "down") param.swipe_d()
 			
-
 			if (direction == "cancel"){//best way to check no move??
 				if ( tinit - tfin < param.times[1]){
 					console.log("doubletap");
@@ -150,13 +148,10 @@
 			element.addEventListener('mousedown', swipe_start)
 
 			document.removeEventListener('mousedown', escape)
-			console.log("end");
 			escape();
 		}
 		
 		function escape() {
-			console.log("escape");
-			//document?
 			document.removeEventListener('mousedown', escape)
             clearInterval(interval);
         }
@@ -172,7 +167,7 @@
 
             if (distance > param.threshold * param.threshold) {
                 if (xy > param.ratio) {
-                    if (dx > 0) return "left"
+                    if (dx < 0) return "left"
                     else return "right"
                 } else {
                     if (dy > 0) return "down"
