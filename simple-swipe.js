@@ -49,8 +49,11 @@
 		var param = merge(defaults, options);
 		
 		element.addEventListener('mousedown', swipe_start);
+        element.addEventListener('touchstart', swipe_start);
+
 		//this sometimes doesn't go?
 		window.addEventListener('mouseup', swipe_end);
+        window.addEventListener('touchend', swipe_end);
 
 		
 		function swipe_start(e){
@@ -70,9 +73,11 @@
 
 			//$(this).on('mousemove touchmove', move);
 			element.addEventListener('mousemove', swipe_move);
+			element.addEventListener('touchmove', swipe_move);
 
             //$(document).one('keydown', escape);
 			document.addEventListener('mousedown', escape);
+			document.addEventListener('touchstart', escape);
 
             escape();
 			interval = setInterval(function() {
@@ -139,6 +144,7 @@
 	
             //this prevents mousemove from always happening
             element.removeEventListener('mousemove', swipe_move);
+            element.removeEventListener('touchmove', swipe_move);
 
             action = "end";
             
@@ -146,13 +152,18 @@
             param.swipe(direction, action, dt, dx, dy, xinit, yinit);
             //$(this).one('mousedown touchstart', touchstart);
 			element.addEventListener('mousedown', swipe_start);
+			element.addEventListener('touchstart', swipe_start);
 
 			document.removeEventListener('mousedown', escape);
+            document.removeEventListener('rouchstart', escape);
+
 			escape();
 		}
 		
 		function escape() {
 			document.removeEventListener('mousedown', escape);
+            document.removeEventListener('touchstart', escape);
+            
             clearInterval(interval);
         }
 
