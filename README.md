@@ -13,7 +13,7 @@ Lightweight JavaScript plugin for cross-platform touch support.
 
 ```JavaScript
 var myswipeArea = new swipeArea( Element )
-myswipeArea.swipe{ options }
+myswipeArea.swipe( options )
 ```  
 
  - `options` is an object with the following properties and default values:
