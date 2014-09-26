@@ -159,7 +159,7 @@
         function getms() {
             return new Date().getTime();
         }
-		
+
 		function dir(dx, dy) {
             distance = dx * dx + dy * dy;
 			//theta = Math.atan2(dy, dx);
@@ -177,10 +177,8 @@
         }
 		
 	}
-	
-	
 
-	
+
 	// Attach to window
     if (this.swipeAea)
         throw 'noob';
