@@ -1,5 +1,5 @@
 # Simple-Swipe
-Lightweight jQuery (1.7) plugin for cross-platform touch support.
+Lightweight JavaScript plugin for cross-platform touch support.
 
 ## Features
  - indicates the state of the user's action
@@ -7,11 +7,13 @@ Lightweight jQuery (1.7) plugin for cross-platform touch support.
  - user definable refresh rate 
   - allows large functions to run without bogging the system
  - options are easily adjustable
+ - does not require jQuery
 
 ## Usage
 
 ```JavaScript
-$( selector ).swipe(options);
+var myswipeArea = new swipeArea( Element )
+myswipeArea.swipe( options )
 ```  
 
  - `options` is an object with the following properties and default values:
@@ -48,5 +50,3 @@ $( selector ).swipe(options);
 
 ## Todo
  - improve documentation
- - add JavaScript only version
- - add support for previous versions of jQuery
