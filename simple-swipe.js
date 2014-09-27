@@ -6,11 +6,9 @@
             var t = selector.slice(0,1);
             switch (t){
                 case "#": {
-                    this.type = 1 // id 
                     this.elements = [document.getElementById( selector.slice(1) )];
                     break;}
                 case ".": {
-                    this.type = 2 // css class
                     this.elements = document.getElementsByClassName( selector.slice(1) );
                     break;}
                 default: this.elements = document.getElementsByTagName( selector ); 
@@ -131,7 +129,7 @@
                     
                 }
             }
-            console.log(dx);
+            
             action = "move";
             
         }
