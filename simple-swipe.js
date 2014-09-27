@@ -20,8 +20,8 @@
     var elements = this.elements;
     var s = this.s;
     var type = this.type;
-    var xinit;
-    var yinit;
+    var x_init;
+    var y_init;
     var tinit; 
     var dt;
     var tfin;
@@ -31,6 +31,9 @@
     var direction;
     var action;
     var interval;
+    var touch_init = [];
+    var touches = [];
+    var touchcount = 0;
 
     //merge function
     var defaults = {
@@ -83,16 +86,21 @@
     window.addEventListener('touchend', swipe_end);
 
     
-    function swipe_start(e){
+    function swipe_start(e, i){
       action = e.type;
 
       if( action == 'mousedown' ){
-        xinit = e.clientX;
-        yinit = e.clientY;
+        touch_init[0] = {x: e.clientX, y: e.clientY};
       } else if (action == 'touchstart') {
-        xinit = e.targetTouches[0].clientX;
-        yinit = e.targetTouches[0].clientY;
-      }
+          var tt = e.targetTouches;
+          for(i=0; i<tt.length; i++){
+            touch_init[i] = {x: tt[i].clientX, 
+                             y: tt[i].clientY}
+          }
+        }
+      x_init = touch_init[0].x;
+      y_init = touch_init[0].x;
+     // console.log(touch_init);
       tinit = getms();
       action = "start";
 
@@ -104,59 +112,75 @@
       interval = setInterval(function() {
         dt = getms() - tinit;
         direction = dir(dx, dy);
-        param.swipe(direction, action, dt, dx, dy, xinit, yinit);
+        param.swipe(direction, action, dt, dx, dy, x_init, y_init);
       }, param.refresh);
     }
     
-    function swipe_move(e){
+    function swipe_move(e, i){
       action = e.type;
-
-      if (xinit !== 0) {
+      touches = [];
+      if (x_init !== 0) {
         if (action == 'mousemove') {
-          dx = e.clientX - xinit;
-          dy = e.clientY - yinit;
+          touches[0] = {x: e.clientX, y: e.clientY};
         } else if (action == 'touchmove') {
-          dx = e.targetTouches[0].clientX - xinit;
-          dy = e.targetTouches[0].clientY - yinit;
+          var tt = e.targetTouches;//console.log(tt);
+          for(i=0; i<tt.length; i++){
+            touches[i] = {x: tt[i].clientX, 
+                          y: tt[i].clientY}
+          } 
           }
+        
+        touchcount = touches.length;  
+        //console.log(touches[0], touch_init[0]);
+        dx = touches[0].x - touch_init[0].x;
+        dy = touches[0].x - touch_init[0].y;
+        console.log(dx)
       }
       action = "move";
+      
     }
     
     function swipe_end(e){
       action = e.type;
-      switch( direction ){
-        case "right": param.swipe_r(); break;
-        case "left": param.swipe_l(); break;
-        case "up": param.swipe_u(); break;
-        case:"down": param.swipe_d(); break;
+      if(  touchcount>1 ){ 
+        console.log(" keep goin");
       }
-      if (direction == "cancel"){
-        if ( tinit - tfin < param.times[1]){
-          console.log("doubletap");
-          param.doubletap();
-        } else if ( dt > param.times[0]) {
-          console.log("longtap");
-          param.longtap();
-        } else  { //avoid tap on first click of doubletap?
-          console.log("tap");
-          param.tap();
-        }
-      }
+      else{
+        switch( direction ){
+            case "right": param.swipe_r(); break;
+            case "left": param.swipe_l(); break;
+            case "up": param.swipe_u(); break;
+            case "down": param.swipe_d(); break;
+          }
+          if (direction == "cancel"){
+            if ( tinit - tfin < param.times[1]){
+              console.log("doubletap");
+              param.doubletap();
+            } else if ( dt > param.times[0]) {
+              console.log("longtap");
+              param.longtap();
+            } else  { //avoid tap on first click of doubletap?
+              console.log("tap");
+              param.tap();
+            }
+          }
+          
+          tfin = getms();
+          x_init = y_init = 0;
+          dx = dy = 0;
+          touches = [];
+          touchcount = 0;
+          action = "end";
       
-      tfin = getms();
-      xinit = yinit = 0;
-      dx = dy = 0;
-      action = "end";
-  
-      param.swipe(direction, action, dt, dx, dy, xinit, yinit);
+          param.swipe(direction, action, dt, dx, dy, x_init, y_init);
 
-      removeListener('mousemove touchmove', swipe_move);
-      addListener('mousedown touchstart', swipe_start);
-      document.removeEventListener('mousedown', escape);
-      document.removeEventListener('touchstart', escape);
+          removeListener('mousemove touchmove', swipe_move);
+          addListener('mousedown touchstart', swipe_start);
+          document.removeEventListener('mousedown', escape);
+          document.removeEventListener('touchstart', escape);
 
-      escape();
+          escape();
+        }
     }
     
     function escape() {

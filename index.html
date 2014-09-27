@@ -3,7 +3,7 @@
 	<head>
 		<title>wut?</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, intial-scale=1">
+		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 		<!--link rel='stylesheet' type='text/css' href='css/style.css'-->
 		
 		<script src="simple-swipe.js"></script>
@@ -30,8 +30,7 @@
 	<script>
 	
 	var mySA = new swipeArea( ".container" );
-	var mySA2 = new swipeArea( 1 );
-	mySA.swipe({swipe: function(){}});
+	mySA.swipe({swipe: function(x, y, t, dx){}, refresh: 0});
     //document.getElementById( "container" ).addEventListener("touchstart", function(){alert("noob")})
 	</script>
 </html>
