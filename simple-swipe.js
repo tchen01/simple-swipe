@@ -13,7 +13,7 @@
                     this.type = 2 // css class
                     this.elements = document.getElementsByClassName( selector.slice(1) );
                     break;}
-                default: this.s = selector; 
+                default: this.elements = document.getElementsByTagName( selector ); 
             }
         }
         
@@ -63,20 +63,26 @@
         
         var param = merge(defaults, options);
         
-        function addListener(e, f, i){
-            for(i=0;i<elements.length;i++){
-                elements[i].addEventListener(e, f);
+        function addListener(e, f, i, j){//why do i have to put i, j here???
+            var evts = e.split(" ");
+            for(i=0;i<evts.length;i++){
+                for(j=0;j<elements.length;j++){
+                    elements[j].addEventListener(evts[i], f);
+                    }
                 }
         }
         
-        function removeListener(e, f, i){
-            for(i=0;i<elements.length;i++){
-                elements[i].removeEventListener(e, f);
+        function removeListener(e, f, i, j){
+            var evts = e.split(" ");
+            for(i=0;i<evts.length;i++){
+                for(j=0;j<elements.length;j++){
+                    elements[j].removeEventListener(evts[i], f);
+                    }
                 }
         }
         
-        addListener('mousedown', swipe_start);
-        addListener('touchstart', swipe_start);
+        addListener('mousedown touchstart', swipe_start);
+       //addListener('touchstart', swipe_start);
 
         window.addEventListener('mouseup', swipe_end);
         window.addEventListener('touchend', swipe_end);
@@ -96,8 +102,8 @@
 
             action = "start";
 
-            addListener('mousemove', swipe_move);
-            addListener('touchmove', swipe_move);
+            addListener('mousemove touchmove', swipe_move);
+            //addListener('touchmove', swipe_move);
 
             document.addEventListener('mousedown', escape);
             document.addEventListener('touchstart', escape);
@@ -167,14 +173,14 @@
             dx = dy = 0;
     
             //this prevents mousemove from always happening
-            removeListener('mousemove', swipe_move);
-            removeListener('touchmove', swipe_move);
+            removeListener('mousemove touchmove', swipe_move);
+            //removeListener('touchmove', swipe_move);
 
             action = "end";
             param.swipe(direction, action, dt, dx, dy, xinit, yinit);
 
-            addListener('mousedown', swipe_start);
-            addListener('touchstart', swipe_start);
+            addListener('mousedown touchstart', swipe_start);
+            //addListener('touchstart', swipe_start);
 
             document.removeEventListener('mousedown', escape);
             document.removeEventListener('touchstart', escape);
