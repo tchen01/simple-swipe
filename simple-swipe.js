@@ -80,8 +80,6 @@
     }
     
     addListener('mousedown touchstart', swipe_start);
-     //addListener('touchstart', swipe_start);
-
     window.addEventListener('mouseup', swipe_end);
     window.addEventListener('touchend', swipe_end);
 
@@ -92,15 +90,15 @@
       if( action == 'mousedown' ){
         touch_init[0] = {x: e.clientX, y: e.clientY};
       } else if (action == 'touchstart') {
-          var tt = e.targetTouches;
-          for(i=0; i<tt.length; i++){
-            touch_init[i] = {x: tt[i].clientX, 
-                             y: tt[i].clientY}
-          }
+          var tt = e.targetTouches; 
+          
+          touch_init.push( {x: tt[tt.length - 1].clientX, 
+                           y: tt[tt.length - 1].clientY} )
+          
         }
       x_init = touch_init[0].x;
       y_init = touch_init[0].x;
-     // console.log(touch_init);
+      console.log(touch_init);
       tinit = getms();
       action = "start";
 
@@ -131,7 +129,7 @@
           }
         
         touchcount = touches.length;  
-        //console.log(touches[0], touch_init[0]);
+        //console.log(touches, touch_init[0]);
         dx = touches[0].x - touch_init[0].x;
         dy = touches[0].x - touch_init[0].y;
         console.log(dx)
@@ -143,9 +141,10 @@
     function swipe_end(e){
       action = e.type;
       if(  touchcount>1 ){ 
-        console.log(" keep goin");
+        console.log("keep goin'");
       }
       else{
+        console.log("stop!");
         switch( direction ){
             case "right": param.swipe_r(); break;
             case "left": param.swipe_l(); break;
@@ -168,6 +167,7 @@
           tfin = getms();
           x_init = y_init = 0;
           dx = dy = 0;
+          touch_init = [];
           touches = [];
           touchcount = 0;
           action = "end";
