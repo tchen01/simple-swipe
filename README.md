@@ -2,20 +2,19 @@
 Lightweight JavaScript plugin for cross-platform touch support.
 
 ## Features
- - indicates the state of the user's action
  - returns the direction of the swipe
  - user definable refresh rate 
-  - allows large functions to run without bogging the system
- - options are easily adjustable
+  - allows functions to be run less frequently if desired
+ - easily adjustable options
  - does not require jQuery
 
 ## Usage
 
 ```JavaScript
-var myswipeArea = new swipeArea( Element )
+var myswipeArea = new swipeArea( selector )
 myswipeArea.swipe( options )
 ```  
-
+ - `selector` is a string in the form `"tag"`, `"#id"` or `".class"`. This works just like a jQuery selector.
  - `options` is an object with the following properties and default values:
   - `{  swipe: function(){},
 	swipe_r: function(){},
@@ -41,12 +40,14 @@ myswipeArea.swipe( options )
     - all directional swipes are executed when a swipe is registered in the given direction.
     - `tap`: 
     - `doubletap`:
-    - `longtap`:
+    - `longtap`: 
     - `times`: how long (in ms) before tap becomes longtap, time second tap must occur in to be counted as doubletap
     - `threshold`: minimum distance (in px) from start point to return a swipe
-    - `refresh`: how often `swipe` is run (in ms)
+    - `refresh`: how often the `swipe` function is run (in ms)
     - `ratio`: ratio of x to y seperating vertical swipes from horizontal
 
 
 ## Todo
+ - clean up code
  - improve documentation
+ - 
