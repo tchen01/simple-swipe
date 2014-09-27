@@ -2,19 +2,34 @@
     'use strict';
 
     var swipeArea = function( selector ) {
-        this.s = selector; // adjust stuff here for other selectors etc.
-
-    };
+        if( typeof selector === "string"){
+            var t = selector.slice(0,1);
+            switch (t){
+                case "#": {
+                    this.type = 1 // id 
+                    this.s = selector.slice(1)
+                    break;}
+                case ".": {
+                    this.type = 2 // css class
+                    this.s = selector.slice(1)
+                    break;}
+                default: this.s = selector; 
+            }
+        }
+        
+    }
 
     swipeArea.prototype.swipe = function( options ){
         //some values and stuff
         //there is probably a better way to do this?
-        var element = this.s;
+        var element = document.getElementById( this.s );
+        var s = this.s;
+        var type = this.type;
         var xinit;
         var yinit;
         var tinit; 
         var dt;
-        var    tfin;
+        var tfin;
         var dx;
         var dy;
         var distance;
@@ -48,8 +63,31 @@
         
         var param = merge(defaults, options);
         
-        element.addEventListener('mousedown', swipe_start);
-        element.addEventListener('touchstart', swipe_start);
+        function addListener(e, f){
+            switch( type ){
+                case 1:
+                    document.getElementById( s ).addEventListener(e, f);
+                    break;
+                case 2:
+                
+                    break;
+            }
+        }
+        
+        function removeListener(e, f){
+            switch( type ){
+                case 1:
+                    document.getElementById( s ).removeEventListener(e, f);
+                    break;
+                case 2:
+                
+                    break;
+            }
+        }
+        
+        //addListener('mousedown', swipe_start);
+        addListener('mousedown', swipe_start);
+        addListener('touchstart', swipe_start);
 
         //this sometimes doesn't go?
         window.addEventListener('mouseup', swipe_end);
@@ -72,8 +110,8 @@
             action = "start";
 
             //$(this).on('mousemove touchmove', move);
-            element.addEventListener('mousemove', swipe_move);
-            element.addEventListener('touchmove', swipe_move);
+            addListener('mousemove', swipe_move);
+            addListener('touchmove', swipe_move);
 
             //$(document).one('keydown', escape);
             document.addEventListener('mousedown', escape);
@@ -144,19 +182,19 @@
             dx = dy = 0;
     
             //this prevents mousemove from always happening
-            element.removeEventListener('mousemove', swipe_move);
-            element.removeEventListener('touchmove', swipe_move);
+            removeListener('mousemove', swipe_move);
+            removeListener('touchmove', swipe_move);
 
             action = "end";
             
 
             param.swipe(direction, action, dt, dx, dy, xinit, yinit);
             //$(this).one('mousedown touchstart', touchstart);
-            element.addEventListener('mousedown', swipe_start);
-            element.addEventListener('touchstart', swipe_start);
+            addListener('mousedown', swipe_start);
+            addListener('touchstart', swipe_start);
 
             document.removeEventListener('mousedown', escape);
-            document.removeEventListener('rouchstart', escape);
+            document.removeEventListener('touchstart', escape);
 
             escape();
         }
