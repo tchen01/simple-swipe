@@ -7,11 +7,11 @@
             switch (t){
                 case "#": {
                     this.type = 1 // id 
-                    this.s = selector.slice(1)
+                    this.elements = [document.getElementById( selector.slice(1) )];
                     break;}
                 case ".": {
                     this.type = 2 // css class
-                    this.s = selector.slice(1)
+                    this.elements = document.getElementsByClassName( selector.slice(1) );
                     break;}
                 default: this.s = selector; 
             }
@@ -22,7 +22,7 @@
     swipeArea.prototype.swipe = function( options ){
         //some values and stuff
         //there is probably a better way to do this?
-        var element = document.getElementById( this.s );
+        var elements = this.elements;
         var s = this.s;
         var type = this.type;
         var xinit;
@@ -36,7 +36,7 @@
         var direction;
         var action;
         var interval;
-        
+
         //merge function
         var defaults = {
             swipe: function(){},
@@ -63,33 +63,21 @@
         
         var param = merge(defaults, options);
         
-        function addListener(e, f){
-            switch( type ){
-                case 1:
-                    document.getElementById( s ).addEventListener(e, f);
-                    break;
-                case 2:
-                
-                    break;
-            }
+        function addListener(e, f, i){
+            for(i=0;i<elements.length;i++){
+                elements[i].addEventListener(e, f);
+                }
         }
         
-        function removeListener(e, f){
-            switch( type ){
-                case 1:
-                    document.getElementById( s ).removeEventListener(e, f);
-                    break;
-                case 2:
-                
-                    break;
-            }
+        function removeListener(e, f, i){
+            for(i=0;i<elements.length;i++){
+                elements[i].removeEventListener(e, f);
+                }
         }
         
-        //addListener('mousedown', swipe_start);
         addListener('mousedown', swipe_start);
         addListener('touchstart', swipe_start);
 
-        //this sometimes doesn't go?
         window.addEventListener('mouseup', swipe_end);
         window.addEventListener('touchend', swipe_end);
 
@@ -103,17 +91,14 @@
             } else if (action == 'touchstart') {
                 xinit = e.targetTouches[0].clientX;
                 yinit = e.targetTouches[0].clientY;
-                //el = document.elementFromPoint(xinit, yinit);
             }
             tinit = getms();
 
             action = "start";
 
-            //$(this).on('mousemove touchmove', move);
             addListener('mousemove', swipe_move);
             addListener('touchmove', swipe_move);
 
-            //$(document).one('keydown', escape);
             document.addEventListener('mousedown', escape);
             document.addEventListener('touchstart', escape);
 
@@ -140,7 +125,7 @@
                     
                 }
             }
-
+            console.log(dx);
             action = "move";
             
         }
@@ -186,10 +171,8 @@
             removeListener('touchmove', swipe_move);
 
             action = "end";
-            
-
             param.swipe(direction, action, dt, dx, dy, xinit, yinit);
-            //$(this).one('mousedown touchstart', touchstart);
+
             addListener('mousedown', swipe_start);
             addListener('touchstart', swipe_start);
 
@@ -229,7 +212,6 @@
     }
 
 
-    // Attach to window
     if (this.swipeAea)
         throw 'noob';
     this.swipeArea = swipeArea;

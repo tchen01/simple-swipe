@@ -11,13 +11,16 @@
 
 	<body>
 	
-	<div id="container" >fdaas
-	<div>
+	<div class="container" >fdaas
+	</div>
+    <div class="container" style="background:blue; left: 50%;">fdaasfdafdsa
+	</div>
+
 
 	</body>
 	<style>
 	
-	#container{
+	.container{
 		position: absolute;
 		background: red;
 		width: 50%;
@@ -26,7 +29,7 @@
 	</style>
 	<script>
 	
-	var mySA = new swipeArea( "#container" );
+	var mySA = new swipeArea( ".container" );
 	var mySA2 = new swipeArea( 1 );
 	mySA.swipe({swipe: function(){}});
     //document.getElementById( "container" ).addEventListener("touchstart", function(){alert("noob")})
