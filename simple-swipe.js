@@ -16,7 +16,7 @@
 
   swipeArea.prototype.swipe = function( options ){
     //some values and stuff
-    //there is probably a better way to do this?
+    //i'm probably doing something wrong if i have to do this?
     var elements = this.elements;
     var s = this.s;
     var type = this.type;
@@ -34,7 +34,12 @@
     var touch_init = [];
     var touches = [];
     var touchcount = 0;
-
+    var mx;
+    var my;
+    var md;
+    var mh; //distance between two fingers
+    var zoom = 1;
+    
     //merge function
     var defaults = {
       swipe: function(){},
@@ -101,7 +106,13 @@
       console.log(touch_init);
       tinit = getms();
       action = "start";
-
+      
+      if( touch_init.length > 1){
+          mx = touch_init[1].x - touch_init[0].x;
+          my = touch_init[1].y - touch_init[0].y;
+          mh = Math.sqrt( mx * mx + my * my );
+        }
+        
       addListener('mousemove touchmove', swipe_move);
       document.addEventListener('mousedown', escape);
       document.addEventListener('touchstart', escape);
@@ -132,7 +143,16 @@
         //console.log(touches, touch_init[0]);
         dx = touches[0].x - touch_init[0].x;
         dy = touches[0].x - touch_init[0].y;
-        console.log(dx)
+        //console.log(dx)
+        
+        //multi touch stuff ( rotation, pinch zoom)
+        if( touchcount > 1){
+          mx = touches[1].x - touches[0].x;
+          my = touches[1].y - touches[0].y;
+          md = Math.sqrt( mx * mx + my * my );
+          zoom = md / mh;
+          //console.log( zoom );
+        }
       }
       action = "move";
       
@@ -171,7 +191,9 @@
           touches = [];
           touchcount = 0;
           action = "end";
-      
+          mx = my = mh = 0;
+          zoom = 0;
+          
           param.swipe(direction, action, dt, dx, dy, x_init, y_init);
 
           removeListener('mousemove touchmove', swipe_move);
