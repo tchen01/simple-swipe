@@ -4,55 +4,35 @@
   var swipeArea = function( selector ) {
     var t = selector.slice(0,1);
     switch (t){
-      case "#": {
-        this.elements = [document.getElementById( selector.slice(1) )];
-        break;}
-      case ".": {
-        this.elements = document.getElementsByClassName( selector.slice(1) );
-        break;}
+      case "#": 
+        this.elements = [document.getElementById( selector.slice(1) )];break;
+      case ".": 
+        this.elements = document.getElementsByClassName( selector.slice(1) );break;
       default: this.elements = document.getElementsByTagName( selector ); 
     }
   }
 
   swipeArea.prototype.swipe = function( options ){
-    //some values and stuff
+    //initialize variables
     //i'm probably doing something wrong if i have to do this?
     var elements = this.elements;
-    var s = this.s;
-    var type = this.type;
-    var x_init;
-    var y_init;
-    var tinit; 
-    var dt;
-    var tfin;
-    var dx;
-    var dy;
-    var distance;
-    var direction;
-    var action;
-    var interval;
-    var touch_init = [];
-    var touches = [];
-    var touchcount = 0;
-    var mx;
-    var my;
-    var md;
-    var mh; //distance between two fingers
-    var zoom = 1;
+    var x_init, y_init, tinit, dt, tfin, dx, dy; 
+    var distance, direction, action, interval;
+    var touch_init = [], touches = [], touchcount = 0;
+    var mx, my, md, mh, zoom = 1;
     
-    //merge function
     var defaults = {
       swipe: function(){},
-      swipe_r: function(){},
+      swipe_r: function(){}, //should these be able to have parameters?
       swipe_l: function(){},
       swipe_u: function(){},
       swipe_d: function(){},
       tap: function(){},
-      doubletap: function(){}, //not implemented
+      doubletap: function(){}, //not implemented well
       longtap: function(){},
       times: [150, 75], //longtouch, doubletap
       threshold: 200,
-      refresh: 100, //refresh rate in ms
+      refresh: 50,
       ratio: 1 
     };
     
@@ -66,8 +46,8 @@
     
     var param = merge(defaults, options);
     
-    function addListener(e, f, i, j){//why do i have to put i, j here???
-      var evts = e.split(" ");
+    function addListener(e, f){
+      var evts = e.split(" "), i, j; //why do i have to put i, j here???
       for(i=0;i<evts.length;i++){
         for(j=0;j<elements.length;j++){
           elements[j].addEventListener(evts[i], f);
@@ -75,8 +55,8 @@
       }
     }
     
-    function removeListener(e, f, i, j){
-      var evts = e.split(" ");
+    function removeListener(e, f){
+      var evts = e.split(" "), i, j;
       for(i=0;i<evts.length;i++){
         for(j=0;j<elements.length;j++){
           elements[j].removeEventListener(evts[i], f);
@@ -85,7 +65,7 @@
     }
     
     addListener('mousedown touchstart', swipe_start);
-    window.addEventListener('mouseup', swipe_end);
+    window.addEventListener('mouseup', swipe_end); //better way to do this?
     window.addEventListener('touchend', swipe_end);
 
     
@@ -142,8 +122,8 @@
         touchcount = touches.length;  
         //console.log(touches, touch_init[0]);
         dx = touches[0].x - touch_init[0].x;
-        dy = touches[0].x - touch_init[0].y;
-        //console.log(dx)
+        dy = touches[0].y - touch_init[0].y;
+        //console.log(dx, dy)
         
         //multi touch stuff ( rotation, pinch zoom)
         if( touchcount > 1){
@@ -157,7 +137,9 @@
       action = "move";
       
     }
-    
+    /* THIS NEEDS TO BE IMPROVED ALOT
+        if mouseup is off element something needs to happen
+        tap detection needs improved*/
     function swipe_end(e){
       action = e.type;
       if(  touchcount>1 ){ 
@@ -170,20 +152,22 @@
             case "left": param.swipe_l(); break;
             case "up": param.swipe_u(); break;
             case "down": param.swipe_d(); break;
+            case "cancel":  
+              if (direction == "cancel"){
+                if ( tinit - tfin < param.times[1]){
+                  console.log("doubletap");
+                  param.doubletap();
+                } else if ( dt > param.times[0]) {
+                  console.log("longtap");
+                  param.longtap();
+                } else  { //avoid tap on first click of doubletap?
+                  console.log("tap");
+                  param.tap();
+                }
+              }
+            break;        
           }
-          if (direction == "cancel"){
-            if ( tinit - tfin < param.times[1]){
-              console.log("doubletap");
-              param.doubletap();
-            } else if ( dt > param.times[0]) {
-              console.log("longtap");
-              param.longtap();
-            } else  { //avoid tap on first click of doubletap?
-              console.log("tap");
-              param.tap();
-            }
-          }
-          
+          console.log( direction )
           tfin = getms();
           x_init = y_init = 0;
           dx = dy = 0;
