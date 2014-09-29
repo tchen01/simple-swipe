@@ -199,17 +199,17 @@
       return new Date().getTime();
     }
 
-    function dir(dx, dy) {
-      distance = dx * dx + dy * dy;
-      //theta = Math.atan2(dy, dx);
-      var xy = Math.abs(dx / dy);
+    function dir(x, y) {
+      distance = x * x + y * y;
+      //theta = Math.atan2(y, x);
+      var xy = Math.abs(x / y);
 
       if (distance > param.threshold * param.threshold) {
         if (xy > param.ratio) {
-          if (dx < 0) return "left";
+          if (x < 0) return "left";
           else return "right";
         } else {
-          if (dy > 0) return "down";
+          if (y > 0) return "down";
           else return "up";
         }
       } else return "cancel";
