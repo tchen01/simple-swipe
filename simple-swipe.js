@@ -65,8 +65,9 @@
     }
     
     addListener('mousedown touchstart', swipe_start);
-    window.addEventListener('mouseup', swipe_end); //better way to do this?
-    window.addEventListener('touchend', swipe_end);
+    // addListener('mouseup touchend', swipe_end); //only detects end if end is on swipearea
+    window.addEventListener('mouseup', swipe_end); 
+    window.addEventListener('touchend', swipe_end); 
 
     
     function swipe_start(e, i){
@@ -76,10 +77,11 @@
         touch_init[0] = {x: e.clientX, y: e.clientY};
       } else if (action == 'touchstart') {
           var tt = e.targetTouches; 
-          
+          //do we need more touches?
+          if(touch_init.length < 2){
           touch_init.push( {x: tt[tt.length - 1].clientX, 
                            y: tt[tt.length - 1].clientY} )
-          
+          }
         }
       x_init = touch_init[0].x;
       y_init = touch_init[0].x;
@@ -94,8 +96,8 @@
         }
         
       addListener('mousemove touchmove', swipe_move);
-      document.addEventListener('mousedown', escape);
-      document.addEventListener('touchstart', escape);
+//      document.addEventListener('mousedown', escape); why were these here?
+//      document.addEventListener('touchstart', escape);
 
       escape();
       interval = setInterval(function() {
@@ -153,40 +155,40 @@
             case "up": param.swipe_u(); break;
             case "down": param.swipe_d(); break;
             case "cancel":  
-              if (direction == "cancel"){
-                if ( tinit - tfin < param.times[1]){
-                  console.log("doubletap");
-                  param.doubletap();
-                } else if ( dt > param.times[0]) {
-                  console.log("longtap");
-                  param.longtap();
-                } else  { //avoid tap on first click of doubletap?
-                  console.log("tap");
-                  param.tap();
-                }
+              if ( tinit - tfin < param.times[1]){
+                console.log("doubletap");
+                param.doubletap();
+              } else if ( dt > param.times[0]) {
+                console.log("longtap");
+                param.longtap();
+              } else  { //avoid tap on first click of doubletap?
+                console.log("tap");
+                param.tap();
               }
             break;        
           }
-          console.log( direction )
-          tfin = getms();
-          x_init = y_init = 0;
-          dx = dy = 0;
-          touch_init = [];
-          touches = [];
-          touchcount = 0;
-          action = "end";
-          mx = my = mh = 0;
-          zoom = 0;
-          
+          reset();
           param.swipe(direction, action, dt, dx, dy, x_init, y_init);
 
           removeListener('mousemove touchmove', swipe_move);
           addListener('mousedown touchstart', swipe_start);
-          document.removeEventListener('mousedown', escape);
-          document.removeEventListener('touchstart', escape);
+//          document.removeEventListener('mousedown', escape);
+//         document.removeEventListener('touchstart', escape);
 
           escape();
         }
+    }
+    function reset(){
+      console.log( direction )
+      tfin = getms();
+      x_init = y_init = 0;
+      dx = dy = 0;
+      touch_init = [];
+      touches = [];
+      touchcount = 0;
+      action = "end";
+      mx = my = mh = 0;
+      zoom = 0;
     }
     
     function escape() {
