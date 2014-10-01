@@ -2,16 +2,11 @@
   'use strict';
 
   var swipeArea = function( selector ) {
-    var t = selector.slice(0,1);
-    switch (t){
-      case "#": 
-        this.elements = [document.getElementById( selector.slice(1) )];break;
-      case ".": 
-        this.elements = document.getElementsByClassName( selector.slice(1) );break;
-      default: this.elements = document.getElementsByTagName( selector ); 
-    }
+    //Special thanks to Jesse Mu
+    this.elements = document.querySelectorAll( selector );
   }
-
+  
+  //need new names for stuff. 
   swipeArea.prototype.swipe = function( options ){
     //initialize variables
     //i'm probably doing something wrong if i have to do this?
@@ -22,6 +17,7 @@
     var mx, my, md, mh, zoom = 1;
     
     var defaults = {
+      //change swipe to only when swiping, add constant function?
       swipe: function(){},
       swipe_r: function(){}, //should these be able to have parameters?
       swipe_l: function(){},
@@ -66,8 +62,9 @@
     
     addListener('mousedown touchstart', swipe_start);
     // addListener('mouseup touchend', swipe_end); //only detects end if end is on swipearea
-    window.addEventListener('mouseup', swipe_end); 
-    window.addEventListener('touchend', swipe_end); 
+    addListener('mouseup touchend', swipe_end);
+    window.addEventListener('mouseup', exit); 
+    window.addEventListener('touchend', exit); 
 
     
     function swipe_start(e, i){
@@ -85,7 +82,7 @@
         }
       x_init = touch_init[0].x;
       y_init = touch_init[0].x;
-      console.log(touch_init);
+      //console.log(touch_init);
       tinit = getms();
       action = "start";
       
@@ -144,6 +141,7 @@
         tap detection needs improved*/
     function swipe_end(e){
       action = e.type;
+      e.stopPropagation();
       if(  touchcount>1 ){ 
         console.log("keep goin'");
       }
@@ -179,7 +177,6 @@
         }
     }
     function reset(){
-      console.log( direction )
       tfin = getms();
       x_init = y_init = 0;
       dx = dy = 0;
@@ -189,6 +186,12 @@
       action = "end";
       mx = my = mh = 0;
       zoom = 0;
+      console.log( direction )
+    }
+    
+    function exit(){
+      direction = "exit";
+      reset();
     }
     
     function escape() {
