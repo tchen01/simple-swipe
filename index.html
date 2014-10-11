@@ -11,7 +11,7 @@
 
 	<body>
 	
-	<div class="container" >
+	<div id="cont" class="container" >
 	</div>
 
 
@@ -26,9 +26,9 @@
         }
 	</style>
 	<script>
-	
+	var container = document.getElementById( "cont" )
 	var mySA = new swipeArea( ".container" );
-	mySA.swipe({swipe: function(x, y, t, dx){}, refresh: 0});
-    //document.getElementById( "container" ).addEventListener("touchstart", function(){alert("noob")})
+	mySA.swipe({swipe: function(x, y, t, dx){container.innerHTML = dx, dy}, refresh: 0});
+  //document.getElementById( "cont" ).addEventListener("touchmove", function(){alert("noob")})
 	</script>
 </html>

@@ -100,12 +100,12 @@
       interval = setInterval(function() {
         dt = getms() - tinit;
         direction = dir(dx, dy);
-        param.swipe(direction, action, dt, dx, dy, x_init, y_init);
-      }, param.refresh);
+        param.swipe(direction, action, dt, dx, dy, zoom, x_init, y_init);
+        }, param.refresh);
     }
     
     function swipe_move(e, i){
-      action = e.type;
+      action = e.type; //why use this var?
       touches = [];
       if (x_init !== 0) {
         if (action == 'mousemove') {
@@ -122,7 +122,7 @@
         //console.log(touches, touch_init[0]);
         dx = touches[0].x - touch_init[0].x;
         dy = touches[0].y - touch_init[0].y;
-        //console.log(dx, dy)
+        console.log(dx, dy)
         
         //multi touch stuff ( rotation, pinch zoom)
         if( touchcount > 1){
@@ -140,15 +140,17 @@
         if mouseup is off element something needs to happen
         tap detection needs improved*/
     function swipe_end(e){
-      action = e.type;
+      action = e.type; //why is this here?
       e.stopPropagation();
+      action = "end";
       if(  touchcount>1 ){ 
         console.log("keep goin'");
       }
       else{
         console.log("stop!");
+        direction = dir(dx, dy);
         switch( direction ){
-            case "right": param.swipe_r(); break;
+            case "right": param.swipe_r(); break; //need parameters??
             case "left": param.swipe_l(); break;
             case "up": param.swipe_u(); break;
             case "down": param.swipe_d(); break;
@@ -166,7 +168,7 @@
             break;        
           }
           reset();
-          param.swipe(direction, action, dt, dx, dy, x_init, y_init);
+          param.swipe(direction, action, dt, dx, dy, zoom, x_init, y_init);
 
           removeListener('mousemove touchmove', swipe_move);
           addListener('mousedown touchstart', swipe_start);
@@ -183,15 +185,15 @@
       touch_init = [];
       touches = [];
       touchcount = 0;
-      action = "end";
       mx = my = mh = 0;
       zoom = 0;
       console.log( direction )
     }
     
     function exit(){
-      direction = "exit";
       reset();
+      action = "exit";
+      direction = "cancel";
     }
     
     function escape() {
@@ -208,16 +210,17 @@
       distance = x * x + y * y;
       //theta = Math.atan2(y, x);
       var xy = Math.abs(x / y);
-
-      if (distance > param.threshold * param.threshold) {
-        if (xy > param.ratio) {
+      console.log( action )
+      if (action == "end" && distance < param.threshold * param.threshold) {
+        return "cancel";
+      } 
+      else if (xy > param.ratio) {
           if (x < 0) return "left";
           else return "right";
         } else {
           if (y > 0) return "down";
           else return "up";
-        }
-      } else return "cancel";
+        }      
     }
   }
 
