@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+		<title>Simple</title>
+		<meta charset="utf-8">
+		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />		
+		<script src="../simple-swipe.js"></script>
+	</head>
+
+	<body>
+	<h1>Basic Direction Detection</h1>
+	<div id="swipearea" class="container" >
+	</div>
+
+
+	</body>
+	<style>
+	html, body{
+        text-align: center;
+        margin: 0;
+        cursor: default;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+    }
+
+	#swipearea{
+        position: absolute;
+		background: red;
+		width: 80%;
+		height: 50%;
+        margin: 10%;
+        border-radius: 15px;
+        box-sizing: border-box;
+        padding: 24%;
+    }
+	</style>
+	<script>
+       var container = document.getElementById( "swipearea" )
+	   var mySA = new swipeArea( "#swipearea" );
+	   mySA.swipe({
+           swipe_r: function(d){container.innerHTML = "You swiped right"},
+           swipe_l: function(d){container.innerHTML = "You swiped left"},
+           swipe_u: function(d){container.innerHTML = "You swiped up"},
+           swipe_d: function(d){container.innerHTML = "You swiped down"},
+           threshold: 0
+       });
+  	</script>
+</html>

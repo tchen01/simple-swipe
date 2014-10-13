@@ -95,7 +95,7 @@
       addListener('mousemove touchmove', swipe_move);
 //      document.addEventListener('mousedown', escape); why were these here?
 //      document.addEventListener('touchstart', escape);
-
+      zoom = 0;
       escape();
       interval = setInterval(function() {
         dt = getms() - tinit;
@@ -122,7 +122,7 @@
         //console.log(touches, touch_init[0]);
         dx = touches[0].x - touch_init[0].x;
         dy = touches[0].y - touch_init[0].y;
-        console.log(dx, dy)
+        //console.log(dx, dy)
         
         //multi touch stuff ( rotation, pinch zoom)
         if( touchcount > 1){
@@ -130,7 +130,7 @@
           my = touches[1].y - touches[0].y;
           md = Math.sqrt( mx * mx + my * my );
           zoom = md / mh;
-          //console.log( zoom );
+          console.log( "zoom: "+ zoom );
         }
       }
       action = "move";
@@ -156,13 +156,13 @@
             case "down": param.swipe_d(); break;
             case "cancel":  
               if ( tinit - tfin < param.times[1]){
-                console.log("doubletap");
+                //console.log("doubletap");
                 param.doubletap();
               } else if ( dt > param.times[0]) {
                 console.log("longtap");
-                param.longtap();
+                //param.longtap();
               } else  { //avoid tap on first click of doubletap?
-                console.log("tap");
+                //console.log("tap");
                 param.tap();
               }
             break;        
@@ -187,7 +187,7 @@
       touchcount = 0;
       mx = my = mh = 0;
       zoom = 0;
-      console.log( direction )
+      //console.log( direction )
     }
     
     function exit(){
