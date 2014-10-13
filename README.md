@@ -11,13 +11,8 @@ Lightweight JavaScript plugin for cross-platform touch support.
 ## Usage
 
 ```JavaScript
-<<<<<<< HEAD
 var myswipeArea = new swipeArea( selector )
 myswipeArea.swipe( options )
-=======
-var myswipeArea = new swipeArea( Element );
-myswipeArea.swipe( options );
->>>>>>> origin/master
 ```  
  - `selector` is a string in the form `"tag"`, `"#id"` or `".class"`. This works just like a jQuery selector.
  - `options` is an object with the following properties and default values:
@@ -35,7 +30,7 @@ myswipeArea.swipe( options );
 	ratio: 1
         }`
     - `swipe`: is a function in the following format:
-        - `function(direction, action, time, dx, dy, xinit, yinit){}`
+        - `function(direction, action, time, dx, dy, zoom, xinit, yinit){}`
             - `direction` will return `"left"`, `"right"`, `"up"`, `"down"` or `"cancel"`
             - `action` will return `start`, `move` or `end`
             - `time` will return the time of the swipe in ms
