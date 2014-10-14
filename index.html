@@ -10,25 +10,7 @@
 	</head>
 
 	<body>
-	
-	<div id="cont" class="container" >
-	</div>
-
-
-	</body>
-	<style>
-	
-	.container{
-		position: absolute;
-		background: red;
-		width: 100%;
-		height: 50%;
-        }
-	</style>
-	<script>
-	var container = document.getElementById( "cont" )
-	var mySA = new swipeArea( ".container" );
-	mySA.swipe({swipe: function(x, y, t, dx){container.innerHTML = dx, dy}, refresh: 0});
-  //document.getElementById( "cont" ).addEventListener("touchmove", function(){alert("noob")})
-	</script>
+    <a href="examples/basic_directions.html">Basic Direction Detection</a>
+    <a href="examples/basic_feedback.html">Basic Touch Feedback</a>	
+  </body>
 </html>
