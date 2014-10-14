@@ -30,13 +30,16 @@ myswipeArea.swipe( options )
 	ratio: 1
         }`
     - `swipe`: is a function in the following format:
-        - `function(direction, action, time, dx, dy, xinit, yinit){}`
+        - `function(direction, action, time, delta, zoom, touches){}`
             - `direction` will return `"left"`, `"right"`, `"up"`, `"down"` or `"cancel"`
-            - `action` will return `start`, `move` or `end`
+            - `action` will return `start`, `move`, `end` or `exit`
+              -`exit` corresponds to a end event that occurs outside the nodes specified by `selector`
             - `time` will return the time of the swipe in ms
-            - `dx` and `dy` will return the change in x or y from the initial position
-            - `xinit` and `yinit` are the coordinates of the initial position
-        - `swipe` is run while a motion is ocurring
+            - `delta` is an array of position objects that indicates the difference in initial and current positions of each touch event
+              - the key of the coordinates is either `x` or `y`
+            - `zoom` is an number corresponding to the percent of the initial distance between the first and second touches.
+            - `touches` is an array of position objects giving the current positions of each touch event
+        - `swipe` is run while a motion is occurring
     - all directional swipes are executed when a swipe is registered in the given direction.
     - `tap`: 
     - `doubletap`:
@@ -50,4 +53,3 @@ myswipeArea.swipe( options )
 ## Todo
  - clean up code
  - improve documentation
- - 
