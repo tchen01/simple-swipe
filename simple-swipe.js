@@ -133,6 +133,8 @@
     
     function swipe_move(e, i){
       action = e.type; //why use this var?
+      e.preventDefault();
+
       touches = [];
       delta = [];
       //if (x_init !== 0) {
