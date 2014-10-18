@@ -123,6 +123,9 @@
 //      document.addEventListener('touchstart', escape);
       zoom = 0;
       escape();
+      // Why does swipe_move have to run?
+      // If it doesn't then a tap will never end the interaval...
+      swipe_move(e, i);
       interval = setInterval(function() {
         dt = getms() - tinit;
         direction = dir(delta[0].x, delta[0].y);
