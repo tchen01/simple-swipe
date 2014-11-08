@@ -6,7 +6,7 @@ Lightweight JavaScript plugin for cross-platform touch support.
  - user definable refresh rate 
   - allows functions to be run less frequently if desired
  - easily adjustable options
- - does not require jQuery
+ - does not require any external libraries or plugins
 
 ## Usage
 
