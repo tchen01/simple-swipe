@@ -1,3 +1,15 @@
+/*
+TODO
+Add time array for each touch similar to delta. Additionally add a total time counter object
+Revamp touch end detection
+
+DECISIONS
+balance between size and features
+ -zoom, rotation, tap type etc.
+ -two versions???
+  -make sure function calls for minimal version work on full version.
+*/
+
 ;(function(undefined) {
   'use strict';
 
@@ -13,8 +25,10 @@
     var elements = this.elements;
     var x, y, x_init, y_init, tinit, dt, tfin, dx, dy; 
     var distance, direction, action, interval;
-    var touch_init = [], touches = [], delta = [], ids = [], touchcount = 0;
+    var touch_init = [], touches = [], delta = [], tinits = [], dts = [], ids = [], touchcount = 0;
     var mx, my, md, mh, zoom = 1;
+    var mt, rotation = 0;
+    var pi = 3.1415;
     
     var defaults = {
       //change swipe to only when swiping, add constant function?
@@ -61,7 +75,6 @@
     
     
     addListener('mousedown touchstart', swipe_start);
-    // addListener('mouseup touchend', swipe_end); //only detects end if end is on swipearea
     addListener('mouseup touchend', swipe_end);
     window.addEventListener('mouseup', exit); 
     window.addEventListener('touchend', exit); 
@@ -69,46 +82,45 @@
     
     function swipe_start(e, i){
       action = e.type;
-
+      
+      //update so mousedown is part of multitouch array.
       if( action == 'mousedown' ){
-        touch_init[0] = {x: e.clientX, y: e.clientY};
+        touch_init[0] = {x: e.clientX, y: e.clientY}; 
       } 
 
       else if (action == 'touchstart'){
         var tt = e.targetTouches;
         var ct = e.changedTouches;
         //assumes only one changed touches...
-        //patch later
+
         var id = ct[0].identifier;
-        // console.log("ct" +  ct[0].identifier );
-        // console.log("tt" + tt)
+        // console.log(ct[0].identifier );
+        // console.log(tt)
         ids.push(id);
-        console.log( ids );
         //not this simple because we don't want to reset everything when we have a new touch...
         touch_init.push( {
-          id: tt[tt.length-1].identifier,
-          x: tt[tt.length-1].clientX, 
-          y: tt[tt.length-1].clientY
+          id: tt[id].identifier,
+          x: tt[id].clientX, 
+          y: tt[id].clientY
           });
+        console.log( ids, touch_init );
+
+        tinits.push( {
+          id: tt[id].identifier, //tt.length-1
+          time: getms()
+        });
+        console.log(tinits);
         for(i=0; i<tt.length; i++){
           touches[i] = {
             id: tt[i].identifier,
             x: tt[i].clientX, 
             y: tt[i].clientY
           }
-            
-          delta[0] = {
-            id: tt[i].identifier,
-            x: touches[0].x - touch_init[0].x,
-            y: touches[0].y - touch_init[0].y
-          }
+
+          
         }
-      //  touches = touch_init;
       }
       
-      // x_init = touch_init[0].x;
-      // y_init = touch_init[0].y;
-      // console.log(touch_init);
       tinit = getms();
       action = "start";
       
@@ -116,21 +128,35 @@
           mx = touch_init[1].x - touch_init[0].x;
           my = touch_init[1].y - touch_init[0].y;
           mh = Math.sqrt( mx * mx + my * my );
+          mt = Math.tan( my / mx ) * 180 / pi;
         }
         
       addListener('mousemove touchmove', swipe_move);
-//      document.addEventListener('mousedown', escape); why were these here?
-//      document.addEventListener('touchstart', escape);
-      zoom = 0;
+    
+      //why do i set these to zero???
+      // zoom = 0;
+      // rotation = 0;
+      
       escape();
       // Why does swipe_move have to run?
       // If it doesn't then a tap will never end the interaval...
       swipe_move(e, i);
       interval = setInterval(function() {
+      
+        // dt as array?
         dt = getms() - tinit;
+        
+        dts = [];
+        for(i=0; i<tinits.length; i++){
+          dts[i] = {
+            id: tt[i].identifier,
+            time: getms() - tinits[i].time
+          }
+        }
+        console.log(dts[dts.length-1], dt)
         direction = dir(delta[0].x, delta[0].y);
         // console.log( touches, delta[0] )  
-        param.swipe(direction, action, dt, delta, zoom, touches);
+        param.swipe(direction, action, dt, delta, zoom, rotation, touches);
         }, param.refresh);
     }
     
@@ -140,6 +166,7 @@
 
       touches = [];
       delta = [];
+      
       //if (x_init !== 0) {
       if (action == 'mousemove') {
         touches[0] = {x: e.clientX, y: e.clientY};
@@ -153,13 +180,16 @@
           touches[i] = {
             id: tt[i].identifier,
             x: tt[i].clientX, 
-            y: tt[i].clientY}
+            y: tt[i].clientY
+          }
         
           delta[i] = {
             id: tt[i].identifier,
             x: touches[i].x - touch_init[i].x,
-            y: touches[i].y - touch_init[i].y}
-        } 
+            y: touches[i].y - touch_init[i].y
+          }
+        }
+          
       }
       touchcount = touches.length;  
       
@@ -169,9 +199,10 @@
         my = touches[1].y - touches[0].y;
         md = Math.sqrt( mx * mx + my * my );
         zoom = md / mh;
-        // console.log( "zoom: "+ zoom );
+        //lol, rotation is kind of hard. how do i ensure tan is always defined...?
+        rotation  = mt - Math.tan( my / mx ) * 180 / pi;
+
       }
-      //}
       action = "move";
       
     }
@@ -191,6 +222,7 @@
         ids.splice(index, 1); //THIS IS WEAR To TEST.
         console.log( ids );
         touch_init.splice(index, 1);
+        tinits.splice(index, 1);
         console.log(touch_init);  
       }
         // touc_init
@@ -219,7 +251,7 @@
               }
             break;        
           }
-          param.swipe(direction, action, dt, delta, zoom, touches);
+          param.swipe(direction, action, dt, delta, zoom, rotation, touches);
           reset();
 
           removeListener('mousemove touchmove', swipe_move);
@@ -236,10 +268,12 @@
       dx = dy = 0;
       touch_init = [];
       touches = [];
+      tinits = [];
       ids = [];
       touchcount = 0;
       mx = my = mh = 0;
       zoom = 0;
+      rotation = 0
       //console.log( direction )
     }
     
